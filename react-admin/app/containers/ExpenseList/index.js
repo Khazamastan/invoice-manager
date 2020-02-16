@@ -44,6 +44,7 @@ import { userService } from '../../services';
 import { Link } from 'react-router-dom';
 import HeaderLink from 'components/Header/HeaderLink';
 import { users } from '../../helpers';
+import _ from "lodash";
 
 export function HomePage({
   currentUser,

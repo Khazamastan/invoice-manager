@@ -1,5 +1,5 @@
+import _ from 'lodash';
 import { Role } from './role';
-
 export const users = [
   {
     id: 1,
@@ -20,7 +20,6 @@ export const users = [
 ];
 
 export function configureFakeBackend() {
-
   const expenses = (localStorage.getItem('expenses') &&
     JSON.parse(localStorage.getItem('expenses'))) || [
     { id: 1, user: 1, description: 'New Year', vendor: 'xxx', amount: 100 },
@@ -101,11 +100,11 @@ export function configureFakeBackend() {
           );
           return ok(useExpenses);
         }
-        function getUserExpenses(body){
-            const useExpenses = expenses.filter(
+        function getUserExpenses(body) {
+          const useExpenses = expenses.filter(
             expense => expense.user == body.user.id,
-            );
-            return useExpenses;
+          );
+          return useExpenses;
         }
         if (url.endsWith('/expenses') && opts.method === 'PUT') {
           const expenses = JSON.parse(localStorage.getItem('expenses'));
