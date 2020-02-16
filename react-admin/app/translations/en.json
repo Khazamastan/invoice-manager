@@ -1,0 +1,5 @@
+{
+  "boilerplate.components.Header.admin": "Admin",
+  "boilerplate.components.Header.home": "Home",
+  "boilerplate.components.Header.logout": "Logout"
+}
