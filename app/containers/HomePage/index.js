@@ -94,28 +94,30 @@ export function HomePage({ currentUser, expenseList }) {
     actions: {
       name: 'Actions',
       width: 30,
-      view: ({ contact, columnKey, cell, i }) => (
-        <p className="text-center">
-        {isAdmin && (
-          isAdmin && <HeaderLink to={`/addExpense/${  contact.id}`} className="button small bg-green-400">
-              Approve
-            </HeaderLink>
+      view: ({ contact, columnKey, cell, i }) => {
+        let list = [];
+        if(isAdmin){
+          list = [
+            <HeaderLink key={1}
+            to={`/addExpense/${contact.id}`}
+            className="button small bg-green-400"
+          >
+            Approve
+          </HeaderLink>,
+          <HeaderLink key={2} to="/addExpense" className="button small bg-red-600">
+          Reject
+        </HeaderLink>
+          ]
         }
-        {isAdmin && (
-          isAdmin && <HeaderLink to="/addExpense" className="button small bg-red-600">
-              Reject
-            </HeaderLink>
-        }
-        {
-            <HeaderLink
-              to={'/editExpense/' + contact.id}
-              className="button small bg-blue-500"
-            >
-              Edit
-            </HeaderLink>
-        }
-      </p>
-      ),
+
+        list.push(<HeaderLink key={3}
+          to={`/editExpense/${contact.id}`}
+          className="button small bg-blue-500"
+        >
+          Edit
+        </HeaderLink>);
+        return list;
+      }
     },
   };
 

@@ -14,14 +14,24 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import styled from 'styled-components';
-import LoadingIndicator from "components/LoadingIndicator";
+import LoadingIndicator from 'components/LoadingIndicator';
 
 import {
   makeSelectExpenses,
   makeSelectLoading,
   makeSelectError,
+  makeSelectCurrentUser,
 } from 'containers/App/selectors';
 import H2 from 'components/H2';
+import H1 from 'components/H1';
+import Table from 'components/Table';
+import Button from 'components/Button';
+import Pagination from 'components/Pagination';
+import Select from 'components/Select';
+import { Link } from 'react-router-dom';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import _ from 'lodash';
 import AtPrefix from './AtPrefix';
 import CenteredSection from './CenteredSection';
 import Input from './Input';
@@ -29,20 +39,11 @@ import Section from './Section';
 import messages from './messages';
 import { changeUsername } from './actions';
 import { setExpenses } from '../App/actions';
-import { makeSelectCurrentUser } from '../App/selectors';
+
 import reducer from './reducer';
 import saga from './saga';
-import H1 from "components/H1"
-import Table from "components/Table"
-import Button from "components/Button"
-import expenses from "../../data/expenses.json";
-import Pagination from "components/Pagination";
-import Select from "components/Select";
+import expenses from '../../data/expenses.json';
 import { userService } from '../../services';
-import { Link } from 'react-router-dom';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import _ from "lodash";
 const key = 'home';
 
 const HomePageContainer = styled.section`
@@ -93,48 +94,114 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
               })}
               onSubmit={(formData, { setStatus, setSubmitting }) => {
                 setStatus();
-                if(!isEdit){
+                if (!isEdit) {
                   formData.user = user.id;
                 }
-                userService.editExpense(user.id, formData)
-                  .then(
-                    expenses => {
-                      addExpense(expenses);
-                      history.push('/');
-                    },
-                    error => {
-                      setSubmitting(false);
-                      setStatus(error);
-                    },
-                  );
+                userService.editExpense(user.id, formData).then(
+                  expenses => {
+                    addExpense(expenses);
+                    history.push('/');
+                  },
+                  error => {
+                    setSubmitting(false);
+                    setStatus(error);
+                  },
+                );
               }}
               render={({ errors, values, status, touched, isSubmitting }) => (
                 <Form>
                   <div className="form-group mt-3">
-                    <label htmlFor="vendor" className="font-regular">Vendor</label>
-                    <Field name="vendor"  value={values && values.vendor} type="text" className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${errors.vendor && touched.vendor ? ' is-invalid' : ''}`} />
-                    <ErrorMessage name="vendor" component="div" className="text-red-600 text-right" />
+                    <label htmlFor="vendor" className="font-regular">
+                      Vendor
+                    </label>
+                    <Field
+                      name="vendor"
+                      value={values && values.vendor}
+                      type="text"
+                      className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
+                        errors.vendor && touched.vendor ? ' is-invalid' : ''
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="vendor"
+                      component="div"
+                      className="text-red-600 text-right"
+                    />
                   </div>
                   <div className="form-group mt-3">
-                    <label htmlFor="amount" className="font-regular">Amount</label>
-                    <Field name="amount" type="number" value={values && values.amount} className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${errors.amount && touched.amount ? ' is-invalid' : ''}`} />
-                    <ErrorMessage name="amount" component="div" className="text-red-600 text-right" />
+                    <label htmlFor="amount" className="font-regular">
+                      Amount
+                    </label>
+                    <Field
+                      name="amount"
+                      type="number"
+                      value={values && values.amount}
+                      className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
+                        errors.amount && touched.amount ? ' is-invalid' : ''
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="amount"
+                      component="div"
+                      className="text-red-600 text-right"
+                    />
                   </div>
 
                   <div className="form-group mt-3">
-                    <label htmlFor="description" className="font-regular">Description</label>
-                    <Field name="description" value={values && values.description} type="text" className={`p-2 mt-3 mb-3 appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${errors.description && touched.description ? ' is-invalid' : ''}`} />
-                    <ErrorMessage name="description" component="div" className="text-red-600 text-right" />
+                    <label htmlFor="description" className="font-regular">
+                      Description
+                    </label>
+                    <Field
+                      name="description"
+                      value={values && values.description}
+                      type="text"
+                      className={`p-2 mt-3 mb-3 appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
+                        errors.description && touched.description
+                          ? ' is-invalid'
+                          : ''
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-600 text-right"
+                    />
                   </div>
                   <div className="form-group mt-3">
-                    <label htmlFor="invoice" className="font-regular">invoice</label>
-                    <Field name="invoice" type="text"  value={values && values.invoice} className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${errors.invoice && touched.invoice ? ' is-invalid' : ''}`} />
-                    <ErrorMessage name="invoice" component="div" className="text-red-600 text-right" />
+                    <label htmlFor="invoice" className="font-regular">
+                      invoice
+                    </label>
+                    <Field
+                      name="invoice"
+                      type="text"
+                      value={values && values.invoice}
+                      className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
+                        errors.invoice && touched.invoice ? ' is-invalid' : ''
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="invoice"
+                      component="div"
+                      className="text-red-600 text-right"
+                    />
                   </div>
                   <div className="form-group mt-3">
-                    <label htmlFor="date" className="font-regular">Date</label>
-                    <Field name="date" type="date" value={values && values.date} className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${errors.date && touched.date ? ' is-invalid' : ''}`} />
-                    <ErrorMessage name="date" component="div" className="text-red-600 text-right" />
+                    <label htmlFor="date" className="font-regular">
+                      Date
+                    </label>
+                    <Field
+                      name="date"
+                      type="date"
+                      value={values && values.date}
+                      className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
+                        errors.date && touched.date ? ' is-invalid' : ''
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="date"
+                      component="div"
+                      className="text-red-600 text-right"
+                    />
                   </div>
                   <div className="row flex items-center justify-between pt-8">
                     <Link
@@ -152,12 +219,13 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
                       {isEdit ? 'Update' : 'Add Expense'}
                     </button>
                   </div>
-                  {status &&
-                  <div className="alert alert-danger">{status}</div>
-                  }
+                  {status && <div className="alert alert-danger">{status}</div>}
                 </Form>
               )}
-            /> : <LoadingIndicator/>}
+            />
+          ) : (
+            <LoadingIndicator />
+          )}
         </HomePageContainer>
       </div>
     </article>
