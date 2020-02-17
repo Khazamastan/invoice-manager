@@ -1,19 +1,19 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { Link } from 'react-router-dom';
 import A from './A';
 import NavBar from './NavBar';
 import HeaderLink from './HeaderLink';
 import Banner from './banner.jpg';
 import messages from './messages';
 import { authenticationService } from '../../services';
-import { Link } from 'react-router-dom';
 
 function Header({ isAdmin, history, user, setUser }) {
   const logout = () => {
-    setUser(false);
     authenticationService.logout();
-    history.push('/login');
+    setUser(false);
+    window.location.reload('/login');
   };
   return (
     <nav className="flex items-center justify-between flex-wrap bg-indigo-500 pt-1 pb-1 pr-0 pl-6">
@@ -34,16 +34,16 @@ function Header({ isAdmin, history, user, setUser }) {
           </svg>
         </button>
       </div>
-      <HeaderLink className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-        <HeaderLink className="text-sm lg:flex-grow">
+      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div className="text-sm lg:flex-grow">
           <HeaderLink to="/">
             <FormattedMessage {...messages.home} />
           </HeaderLink>
           <HeaderLink to="/list">Invoice List</HeaderLink>
-        </HeaderLink>
+        </div>
         <div>
           <NavBar>
-            <div className="flex items-center">
+            <div className="flex items-center text-white">
               {user && (
                 <p className="mr-2">
                   <b>
@@ -51,8 +51,9 @@ function Header({ isAdmin, history, user, setUser }) {
                   </b>
                 </p>
               )}
-              <HeaderLink 
-                to="/login" onClick={logout}
+              <HeaderLink
+                to="/login"
+                onClick={logout}
                 className=" ml-5 bg-indigo-700 hover:bg-indigo-500 border-white border-2 text-white font-bold py-1 px-6 rounded-full"
               >
                 Logout
@@ -60,7 +61,7 @@ function Header({ isAdmin, history, user, setUser }) {
             </div>
           </NavBar>
         </div>
-      </HeaderLink>
+      </div>
     </nav>
   );
   // return (
