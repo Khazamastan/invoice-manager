@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Select from 'components/Select';
 import Input from 'components/Input';
 import Pagination from 'components/Pagination';
@@ -27,6 +27,9 @@ const Table = ({
     );
   }
   const [localQuery, setlocalQuery] = useState(query.search);
+  useEffect(() => {
+    setCurrentPage(query.page);
+  }, [query])
   const [currentPage, setCurrentPage] = useState(query.page);
   const onChangeLocalQuery = e => {
     const { value } = e.target;

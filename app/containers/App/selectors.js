@@ -39,6 +39,12 @@ const makeSelectExpenses = () =>
     globalState => globalState.userData.expenses,
   );
 
+const makeSelectExpensesMetics = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.userData.metrics,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -48,6 +54,7 @@ const makeSelectLocation = () =>
 export {
   selectGlobal,
   makeSelectCurrentUser,
+  makeSelectExpensesMetics,
   makeSelectLoading,
   makeSelectError,
   makeSelectExpenses,

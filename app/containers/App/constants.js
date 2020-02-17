@@ -17,3 +17,4 @@ export const SET_EXPENSES = 'boilerplate/App/SET_EXPENSES';
 export const SET_EXPENSES_ERROR = 'boilerplate/App/SET_EXPENSES_ERROR';
 export const CHANGE_QUERY = 'boilerplate/App/CHANGE_QUERY';
 export const CHANGE_PAGE = 'boilerplate/App/CHANGE_PAGE';
+export const SET_METRICS = 'boilerplate/App/SET_METRICS';

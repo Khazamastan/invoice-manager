@@ -17,14 +17,16 @@ import {
   makeSelectLoading,
   makeSelectError,
   makeSelectExpenses,
+  makeSelectExpensesMetics,
+  makeSelectQuery,
   makeSelectCurrentUser,
 } from 'containers/App/selectors';
-
 import H1 from 'components/H1';
 import LoadingIndicator from 'components/LoadingIndicator';
 import HeaderLink from 'components/Header/HeaderLink';
 import _ from 'lodash';
 import c3 from 'c3';
+import { setQuery, setExpenses, setMetrics } from '../App/actions';
 import { userService } from '../../services';
 
 const HomePageWrapper = styled.section`
@@ -43,7 +45,7 @@ const HomePageWrapper = styled.section`
 
 const bar = {
   data: {
-    type: 'bar',
+    type: 'spline',
     x: 'x',
     columns: [
       [
@@ -62,6 +64,7 @@ const bar = {
     x: {
       type: 'timeseries',
       tick: {
+        count: 20,
         format: '%Y-%m-%d',
       },
     },
@@ -111,17 +114,26 @@ class Chart extends React.PureComponent {
   }
 }
 
-export function HomePage({ currentUser, expenseList }) {
-  const [expenses, setExpenses] = useState(expenseList);
+export function HomePage({ currentUser, expenseMetrics, setExpensesMetics }) {
+  const [expenses, setExpenses] = useState(expenseMetrics);
   useEffect(() => {
-    // if(!expenseList){
+    if(!expenseMetrics){
     userService
-      .getAll(currentUser)
-      .then(expenses => setExpenses([...expenses]));
-    // }
-  }, [currentUser]);
+      .getAllMetrics(currentUser, { all: true })
+      .then(expenses => {
+        debugger;
+        setExpensesMetics(expenses.data)
+      });
+    }
+  }, [currentUser, setExpensesMetics]);
+  
+  debugger;
+  if (expenseMetrics) {
+    bar.data.columns[0] = expenseMetrics[0]
+    bar.data.columns[1] = expenseMetrics[1]
+  }
 
-  if (!expenses) {
+  if (!expenseMetrics) {
     return (
       <HomePageWrapper className="container bg-white">
         <div className="center">
@@ -170,13 +182,19 @@ HomePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   expenseList: makeSelectExpenses(),
+  expenseMetrics: makeSelectExpensesMetics(),
   currentUser: makeSelectCurrentUser(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
+  query: makeSelectQuery(),
 });
 
 export function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    setExpensesMetics: metrics => {
+      dispatch(setMetrics(metrics));
+    },
+  };
 }
 
 const withConnect = connect(

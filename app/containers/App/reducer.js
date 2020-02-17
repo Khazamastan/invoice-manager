@@ -13,6 +13,7 @@ import {
   SET_EXPENSES,
   SET_EXPENSES_ERROR,
   CHANGE_QUERY,
+  SET_METRICS,
 } from './constants';
 
 const currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
@@ -27,6 +28,7 @@ export const initialState = {
       data: false,
       total: 0,
     },
+    metrics: false,
     query: {
       search: '',
       page: 1,
@@ -44,17 +46,24 @@ const appReducer = (state = initialState, action) =>
         break;
 
       case SET_EXPENSES:
-        draft.userData.expenses = Object.assign(draft.userData.expenses, action.expenses);
+        draft.userData.expenses = Object.assign(
+          draft.userData.expenses,
+          action.expenses,
+        );
         draft.loading = false;
         break;
+
+      case SET_METRICS:
+        draft.userData.metrics = action.metrics;
+        break;
+
       case SET_EXPENSES_ERROR:
         draft.error = true;
         break;
-
       case CHANGE_QUERY:
         draft.loading = true;
         draft.userData.query = action.query;
-        if(action.query.search){
+        if (action.query.search && action.change == 'search') {
           draft.userData.query.page = 1;
         }
         break;

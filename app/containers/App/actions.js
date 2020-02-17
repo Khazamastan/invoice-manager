@@ -15,7 +15,7 @@
  *    }
  */
 
-import { SET_USER, SET_EXPENSES, CHANGE_QUERY, CHANGE_PAGE } from './constants';
+import { SET_USER, SET_EXPENSES, CHANGE_QUERY, CHANGE_PAGE, SET_METRICS } from './constants';
 
 export function setUser(user) {
   return {
@@ -31,6 +31,13 @@ export function setExpenses(expenses) {
   };
 }
 
+export function setMetrics(metrics) {
+  return {
+    type: SET_METRICS,
+    metrics,
+  };
+}
+
 
 export function setExpensesError(expenses) {
   return {
@@ -39,16 +46,18 @@ export function setExpensesError(expenses) {
   };
 }
 
-export function setQuery(query) {
+export function setQuery(query, change) {
   return {
     type: CHANGE_QUERY,
     query,
+    change,
   };
 }
 
-export function onChangePage(page) {
+export function onChangePage(page, change) {
   return {
     type: CHANGE_PAGE,
     page,
+    change,
   };
 }

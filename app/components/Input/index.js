@@ -1,6 +1,7 @@
 import React from 'react';
 import InputWrapper from './Wrapper';
 
-const Input = props => <InputWrapper {...props} />;
+
+const Input = React.memo(props => <InputWrapper {...props} />);
 
 export default Input;

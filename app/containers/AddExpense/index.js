@@ -34,11 +34,24 @@ const HomePageContainer = styled.section`
   margin: 60px auto 0 auto;
 `;
 
+Date.prototype.toDateInputValue = (function() {
+  var local = new Date(this);
+  local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+  return local.toJSON().slice(0,10);
+});
+
 export function HomePage({ addExpense, user, match, expenseList, history }) {
   const isEdit = match.params.id;
   const expenseData = isEdit
     ? null
-    : { description: '', vendor: '', amount: '', invoice: '', date: '' };
+    : {
+      description: '',
+      vendor: '',
+      amount: '',
+      invoice: '',
+      date: new Date().toDateInputValue(),
+      status: 'pending',
+    };
   const [expense, SetExpense] = useState(expenseData);
   useEffect(() => {
     if (isEdit) {
@@ -79,7 +92,7 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
                 }
                 userService.editExpense(user.id, formData).then(
                   expenses => {
-                    addExpense({data : false});
+                    addExpense({ data: false });
                     history.push('/list');
                   },
                   error => {
@@ -149,7 +162,7 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
                   </div>
                   <div className="form-group mt-3">
                     <label htmlFor="invoice" className="font-regular">
-                      invoice
+                      Invoice
                     </label>
                     <Field
                       name="invoice"

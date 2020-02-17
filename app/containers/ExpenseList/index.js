@@ -42,21 +42,24 @@ export function HomePage({
   currentUser,
   expenseList,
   addExpense,
+  loading,
   onChangeFilter,
   query,
 }) {
   const [expenses, setExpenses] = useState(expenseList.data);
   const isAdmin = currentUser.role === 'Admin';
   useEffect(() => {
-    if (!expenseList.data) {
-      userService.getAll(currentUser, query).then(expenses => {
-        console.log(expenses)
-        addExpense(expenses);
-      });
-    } else {
-      expenseList.data && setExpenses(expenseList.data);
+    if (!loading) {
+      if (!expenseList.data) {
+        userService.getAll(currentUser, query).then(expenses => {
+          console.log(expenses);
+          addExpense(expenses);
+        });
+      } else {
+        expenseList.data && setExpenses(expenseList.data);
+      }
+      console.log(expenseList.data);
     }
-    console.log(expenseList.data);
   }, [currentUser, expenseList.data]);
 
   const ExpensesListContainer = styled.section`
@@ -73,21 +76,21 @@ export function HomePage({
     }
   `;
   const approveInvoice = invoice => {
-    let invoiceData = Object.assign({},invoice);
+    const invoiceData = Object.assign({}, invoice);
     invoiceData.status = 'approved';
     userService.editExpense(currentUser, invoiceData).then(
       expenses => {
-        addExpense({data : false});
+        addExpense({ data: false });
       },
       error => {},
     );
   };
   const rejectInvoice = invoice => {
-    let invoiceData = Object.assign({},invoice);
+    const invoiceData = Object.assign({}, invoice);
     invoiceData.status = 'rejected';
     userService.editExpense(currentUser, invoiceData).then(
       expenses => {
-        addExpense({data : false});
+        addExpense({ data: false });
         // history.push('/list');
       },
       error => {},
@@ -130,12 +133,13 @@ export function HomePage({
         const canEdit = isAdmin && contact.user == currentUser.id;
         if (contact.status) {
           cls =
-            contact.status == 'approved' ? 'text-green-400' : 'text-red-400';
+            contact.status === 'approved' ? 'text-green-400' : 'text-red-400';
+          cls = contact.status === 'pending' ? 'text-gray-800' : cls;
         }
         const pendingText = !canEdit ? 'PENDING' : '';
         return (
           <p className={`${cls} text-xs`}>
-            {!contact.status || canEdit
+            {contact.status == 'pending' || canEdit
               ? pendingText
               : (contact.status || pendingText).toUpperCase()}
           </p>
@@ -147,7 +151,9 @@ export function HomePage({
       width: 30,
       view: ({ contact }) => {
         const canEdit =
-          isAdmin && !contact.status && contact.user != currentUser.id;
+          isAdmin &&
+          contact.status == 'pending' &&
+          contact.user != currentUser.id;
         let list = [];
         if (canEdit) {
           list = [
@@ -199,20 +205,21 @@ export function HomePage({
       </ExpensesListContainer>
     );
   }
-  const debounceChangeQuery = _.debounce(function(queryObj) {
-    onChangeFilter(queryObj);
-  }, 300);
+  
+  const debounceChangeQuery = _.debounce(function(queryObj, change) {
+    onChangeFilter(queryObj, change);
+  }, 1000);
 
   const onChangeQuery = value => {
     const queryObj = Object.assign({}, query);
     queryObj.search = value;
-    debounceChangeQuery(queryObj);
+    debounceChangeQuery(queryObj, 'search');
   };
 
   const onChangePageNumber = currentPage => {
     const queryObj = Object.assign({}, query);
     queryObj.page = currentPage;
-    debounceChangeQuery(queryObj);
+    onChangeFilter(queryObj, 'page');
   };
 
   const noOfPages = Math.round(expenses.length / PER_PAGE);
@@ -271,8 +278,8 @@ export function mapDispatchToProps(dispatch) {
     addExpense: expense => {
       dispatch(setExpenses(expense));
     },
-    onChangeFilter: query => {
-      dispatch(setQuery(query));
+    onChangeFilter: (query, change) => {
+      dispatch(setQuery(query, change));
     },
   };
 }

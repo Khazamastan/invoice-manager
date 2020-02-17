@@ -4,6 +4,7 @@ export const userService = {
   getAll,
   addExpense,
   editExpense,
+  getAllMetrics,
 };
 
 function getAll(user, query) {
@@ -13,6 +14,16 @@ function getAll(user, query) {
     body: { user, query },
   };
   return fetch(`/expenses`, requestOptions).then(handleResponse);
+}
+
+
+function getAllMetrics(user, query) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader(),
+    body: { user, query },
+  };
+  return fetch(`/metrics`, requestOptions).then(handleResponse);
 }
 
 function addExpense(id, expense) {
