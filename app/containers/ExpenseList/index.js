@@ -49,8 +49,9 @@ export function HomePage({
   const isAdmin = currentUser.role === 'Admin';
   useEffect(() => {
     if (!expenseList.data) {
-      userService.getAll(currentUser).then(expenses => {
-        setExpenses([...expenses.data]);
+      userService.getAll(currentUser, query).then(expenses => {
+        console.log(expenses)
+        addExpense(expenses);
       });
     } else {
       expenseList.data && setExpenses(expenseList.data);
@@ -58,26 +59,36 @@ export function HomePage({
     console.log(expenseList.data);
   }, [currentUser, expenseList.data]);
 
-  const HomePageContainer = styled.section`
+  const ExpensesListContainer = styled.section`
     max-width: 1440px;
+    min-height: 600px;
     padding: 20px 30px 20px 40px;
     margin: 20px auto 0 auto;
+    position: relative;
+    .center {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   `;
   const approveInvoice = invoice => {
-    invoice.status = 'approved';
-    userService.editExpense(currentUser, invoice).then(
+    let invoiceData = Object.assign({},invoice);
+    invoiceData.status = 'approved';
+    userService.editExpense(currentUser, invoiceData).then(
       expenses => {
-        addExpense(expenses);
+        addExpense({data : false});
       },
       error => {},
     );
   };
-
   const rejectInvoice = invoice => {
-    invoice.status = 'rejected';
-    userService.editExpense(currentUser, invoice).then(
+    let invoiceData = Object.assign({},invoice);
+    invoiceData.status = 'rejected';
+    userService.editExpense(currentUser, invoiceData).then(
       expenses => {
-        addExpense(expenses);
+        addExpense({data : false});
+        // history.push('/list');
       },
       error => {},
     );
@@ -181,9 +192,11 @@ export function HomePage({
   const pageCounts = [10, 20, 50, 100];
   if (!expenses) {
     return (
-      <HomePageContainer className="container bg-white">
-        <LoadingIndicator />
-      </HomePageContainer>
+      <ExpensesListContainer className="container bg-white">
+        <div className="center">
+          <LoadingIndicator />
+        </div>
+      </ExpensesListContainer>
     );
   }
   const debounceChangeQuery = _.debounce(function(queryObj) {
@@ -213,7 +226,7 @@ export function HomePage({
         />
       </Helmet>
       <div>
-        <HomePageContainer className="container bg-white">
+        <ExpensesListContainer className="container bg-white">
           <div className="flex justify-between items-center">
             <H1>Your Expenses</H1>
             <HeaderLink
@@ -234,7 +247,7 @@ export function HomePage({
             headers={headers}
             query={query}
           />
-        </HomePageContainer>
+        </ExpensesListContainer>
       </div>
     </article>
   );

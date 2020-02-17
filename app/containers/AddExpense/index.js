@@ -42,7 +42,7 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
   const [expense, SetExpense] = useState(expenseData);
   useEffect(() => {
     if (isEdit) {
-      const initialValue = _.find(expenseList, {
+      const initialValue = _.find(expenseList.data, {
         id: parseInt(match.params.id),
       });
       SetExpense(initialValue);
@@ -79,7 +79,7 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
                 }
                 userService.editExpense(user.id, formData).then(
                   expenses => {
-                    addExpense(false);
+                    addExpense({data : false});
                     history.push('/list');
                   },
                   error => {

@@ -25,7 +25,7 @@ export const initialState = {
   userData: {
     expenses: {
       data: false,
-      count: 0,
+      total: 0,
     },
     query: {
       search: '',
@@ -44,7 +44,7 @@ const appReducer = (state = initialState, action) =>
         break;
 
       case SET_EXPENSES:
-        draft.userData.expenses = action.expenses;
+        draft.userData.expenses = Object.assign(draft.userData.expenses, action.expenses);
         draft.loading = false;
         break;
       case SET_EXPENSES_ERROR:
@@ -54,6 +54,9 @@ const appReducer = (state = initialState, action) =>
       case CHANGE_QUERY:
         draft.loading = true;
         draft.userData.query = action.query;
+        if(action.query.search){
+          draft.userData.query.page = 1;
+        }
         break;
     }
   });

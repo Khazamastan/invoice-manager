@@ -36,9 +36,9 @@ export function LoginPage({ setUser, user, history }) {
           content="A Invoice Manage application LoginPage"
         />
       </Helmet>
-      <main className="container mx-auto p-4 mt-12 flex flex-col items-center justify-center text-gray-700">
-        <div className="w-10/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-4/12 mb-4">
-          <h1 className="text-4xl font-semibold ">Welcome back.</h1>
+      <main className="container mx-auto p-4 mt-12 flex flex-col items-center justify-center text-gray-700 pt-20">
+        <div className="w-10/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-3/12 mb-4">
+          <h1 className="text-4xl font-semibold ">Login.</h1>
 
           <Formik
             initialValues={{
@@ -130,7 +130,7 @@ export function LoginPage({ setUser, user, history }) {
                     Log In
                   </button>
                 </div>
-                {status && <div className="alert alert-danger">{status}</div>}}
+                {status && <div className="alert alert-danger">{status}</div>}
               </Form>
             )}
           />

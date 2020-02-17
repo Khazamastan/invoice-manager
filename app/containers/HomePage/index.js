@@ -27,6 +27,20 @@ import _ from 'lodash';
 import c3 from 'c3';
 import { userService } from '../../services';
 
+const HomePageWrapper = styled.section`
+  max-width: 1440px;
+  min-height: 600px;
+  padding: 20px 30px 20px 40px;
+  margin: 20px auto 0 auto;
+  position: relative;
+  .center {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
+
 const bar = {
   data: {
     type: 'bar',
@@ -107,17 +121,13 @@ export function HomePage({ currentUser, expenseList }) {
     // }
   }, [currentUser]);
 
-  const HomePageContainer = styled.section`
-    max-width: 1440px;
-    padding: 20px 30px 60px 40px;
-    margin: 20px auto 0 auto;
-  `;
-
   if (!expenses) {
     return (
-      <HomePageContainer className="container bg-white">
-        <LoadingIndicator />
-      </HomePageContainer>
+      <HomePageWrapper className="container bg-white">
+        <div className="center">
+          <LoadingIndicator />
+        </div>
+      </HomePageWrapper>
     );
   }
 
@@ -131,7 +141,7 @@ export function HomePage({ currentUser, expenseList }) {
         />
       </Helmet>
       <div>
-        <HomePageContainer className="container bg-white">
+        <HomePageWrapper className="container bg-white">
           <div className="flex justify-between items-center">
             <H1>Dashboard</H1>
             <HeaderLink
@@ -146,7 +156,7 @@ export function HomePage({ currentUser, expenseList }) {
               <Chart type="bar" data={bar.data} />
             </Div>
           </div>
-        </HomePageContainer>
+        </HomePageWrapper>
       </div>
     </article>
   );
