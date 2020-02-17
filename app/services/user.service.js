@@ -26,10 +26,10 @@ function getAllMetrics(user, query) {
   return fetch(`/metrics`, requestOptions).then(handleResponse);
 }
 
-function addExpense(id, expense) {
+function addExpense(user, expense) {
   const requestOptions = {
     method: 'PUT',
-    body: { expense },
+    body: { user, expense },
     headers: authHeader(),
   };
   return fetch(`/expenses`, requestOptions).then(handleResponse);

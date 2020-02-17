@@ -90,7 +90,7 @@ export function HomePage({ addExpense, user, match, expenseList, history }) {
                 if (!isEdit) {
                   formData.user = user.id;
                 }
-                userService.editExpense(user.id, formData).then(
+                userService.editExpense(user, formData).then(
                   expenses => {
                     addExpense({ data: false });
                     history.push('/list');

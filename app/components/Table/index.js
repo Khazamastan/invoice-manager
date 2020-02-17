@@ -55,7 +55,7 @@ const Table = ({
       </p>
       <TableWrapper>
         <TableHead headers={headers} />
-        <TableBody headers={headers} contacts={data} />
+        <TableBody headers={headers} invoices={data} />
       </TableWrapper>
       <div className="mt-5">
         <Pagination

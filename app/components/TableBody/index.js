@@ -3,11 +3,11 @@ import Cell from '../Cell';
 import TbodyWrapper from './Wrapper';
 import CellWrapper from "../Cell/Wrapper"
 const TableBody = props => {
-  const { contacts, headers } = props;
-  const tablecontent = contacts.map((contact, i) => (
+  const { invoices, headers } = props;
+  const tablecontent = invoices.map((invoice, i) => (
     <tr key={i}>
       {Object.keys(headers).map(columnKey => {
-        const cellItem = contact[columnKey];
+        const cellItem = invoice[columnKey];
         let header = headers[columnKey];
         if (header && header.view) {
           const CellView = header.view;
@@ -15,7 +15,7 @@ const TableBody = props => {
             <CellWrapper   key={columnKey} className={columnKey}>
               <CellView
                 key={columnKey}
-                contact={contact}
+                invoice={invoice}
                 header={header}
                 columnKey={columnKey}
                 cell={cellItem}
@@ -28,7 +28,7 @@ const TableBody = props => {
           <Cell
             key={columnKey}
             header={header}
-            contact={contact}
+            invoice={invoice}
             columnKey={columnKey}
             cell={cellItem}
             i={i}

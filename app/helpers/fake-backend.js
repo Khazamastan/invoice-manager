@@ -1080,9 +1080,12 @@ export function configureFakeBackend() {
           );
           return useExpenses;
         }
+
         if (url.endsWith('/expenses') && opts.method === 'PUT') {
+          const { body } = opts;
           const expenses = JSON.parse(localStorage.getItem('expenses'));
-          const { expense } = opts.body;
+          const { expense, user } = body;
+          const isAdmin = user.role === Role.Admin;
           if (expense.id) {
             const itemIndex = _.findIndex(expenses, { id: expense.id });
             Object.assign(expenses[itemIndex], expense);
@@ -1090,6 +1093,9 @@ export function configureFakeBackend() {
             return ok({});
           }
           expense.id = expenses.length;
+          if(isAdmin) {
+            expense.status = 'approved';
+          }
           expenses.push(expense);
           localStorage.setItem('expenses', JSON.stringify(expenses));
           return ok({});

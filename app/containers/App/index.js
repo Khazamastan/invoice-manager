@@ -29,6 +29,7 @@ import { userService } from '../../services';
 import {
   makeSelectCurrentUser,
   makeSelectLoading,
+  makeSelectCurrentUserToken,
   makeSelectError,
 } from './selectors';
 import reducer from './reducer';
@@ -42,7 +43,7 @@ const AppWrapper = styled.div`
 `;
 
 const key = 'global';
-function App({ user, history, setExpenses }) {
+function App({ user, history, setExpenses, token }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const state = {
@@ -64,27 +65,41 @@ function App({ user, history, setExpenses }) {
       <Helmet titleTemplate="%s - Invoice Manage" defaultTitle="Invoice Manage">
         <meta name="description" content="A Invoice Manage application" />
       </Helmet>
-      {currentUser && <Header user={currentUser} isAdmin={isAdmin} />}
+      {currentUser && token && <Header user={currentUser} isAdmin={isAdmin} />}
       <Switch>
-        <PrivateRoute exact user={currentUser} path="/" component={HomePage} />
         <PrivateRoute
           exact
           user={currentUser}
+          token={token}
+          path="/"
+          component={HomePage}
+        />
+        <PrivateRoute
+          exact
+          user={currentUser}
+          token={token}
           path="/list"
           component={ExpenseList}
         />
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" token={token} component={LoginPage} />
         <PrivateRoute
           user={currentUser}
+          token={token}
           path="/addExpense"
           component={AddExpense}
         />
         <PrivateRoute
           user={currentUser}
+          token={token}
           path="/editExpense/:id"
           component={AddExpense}
         />
-        <PrivateRoute user={currentUser} path="" component={NotFoundPage} />
+        <PrivateRoute
+          user={currentUser}
+          token={token}
+          path=""
+          component={NotFoundPage}
+        />
       </Switch>
       <GlobalStyle />
     </AppWrapper>
@@ -93,6 +108,7 @@ function App({ user, history, setExpenses }) {
 
 const mapStateToProps = createStructuredSelector({
   user: makeSelectCurrentUser(),
+  token: makeSelectCurrentUserToken(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
 });

@@ -104,8 +104,8 @@ export function HomePage({
     user: {
       name: 'Created By',
       width: 20,
-      view: ({ contact, columnKey, cell, i }) => {
-        const user = _.find(users, { id: contact.user });
+      view: ({ invoice, columnKey, cell, i }) => {
+        const user = _.find(users, { id: invoice.user });
         return <p>{user.firstName}</p>;
       },
     },
@@ -128,20 +128,20 @@ export function HomePage({
     status: {
       name: 'Status',
       width: 20,
-      view: ({ contact }) => {
+      view: ({ invoice }) => {
         let cls = '';
-        const canEdit = isAdmin && contact.user == currentUser.id;
-        if (contact.status) {
+        const canEdit = isAdmin && invoice.user == currentUser.id;
+        if (invoice.status) {
           cls =
-            contact.status === 'approved' ? 'text-green-400' : 'text-red-400';
-          cls = contact.status === 'pending' ? 'text-gray-800' : cls;
+            invoice.status === 'approved' ? 'text-green-400' : 'text-red-400';
+          cls = invoice.status === 'pending' ? 'text-gray-800' : cls;
         }
-        const pendingText = !canEdit ? 'PENDING' : '';
+        const pendingText = !canEdit ? 'PENDING' : 'APPROVED';
         return (
           <p className={`${cls} text-xs`}>
-            {contact.status == 'pending' || canEdit
+            {invoice.status == 'pending' || canEdit
               ? pendingText
-              : (contact.status || pendingText).toUpperCase()}
+              : (invoice.status || pendingText).toUpperCase()}
           </p>
         );
       },
@@ -149,17 +149,17 @@ export function HomePage({
     actions: {
       name: 'Actions',
       width: 30,
-      view: ({ contact }) => {
+      view: ({ invoice }) => {
         const canEdit =
           isAdmin &&
-          contact.status == 'pending' &&
-          contact.user != currentUser.id;
+          invoice.status == 'pending' &&
+          invoice.user != currentUser.id;
         let list = [];
         if (canEdit) {
           list = [
             <button
               key="approve"
-              onClick={() => approveInvoice(contact)}
+              onClick={() => approveInvoice(invoice)}
               className="mr-2 bg-green-500 text-sm hover:bg-blue-500 text-white hover:text-white py-1 px-2 border hover:border-transparent rounded"
             >
               Approve
@@ -167,7 +167,7 @@ export function HomePage({
             <button
               key="reject"
               to="/addExpense"
-              onClick={() => rejectInvoice(contact)}
+              onClick={() => rejectInvoice(invoice)}
               className="mr-2 bg-red-400 text-sm hover:bg-blue-500 text-white  hover:text-white py-1 px-2 hover:border-transparent rounded"
             >
               Reject
@@ -175,15 +175,17 @@ export function HomePage({
           ];
         }
 
-        list.push(
-          <Link
-            key="edit"
-            to={`/editExpense/${contact.id}`}
-            className="bg-blue-500 text-sm hover:bg-blue-700 text-white  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
-          >
-            Edit
-          </Link>,
-        );
+        if (invoice.status == 'pending' || isAdmin) {
+          list.push(
+            <Link
+              key="edit"
+              to={`/editExpense/${invoice.id}`}
+              className="bg-blue-500 text-sm hover:bg-blue-700 text-white  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
+            >
+              Edit
+            </Link>,
+          );
+        }
 
         return <div className="text-left">{list}</div>;
       },
@@ -205,7 +207,7 @@ export function HomePage({
       </ExpensesListContainer>
     );
   }
-  
+
   const debounceChangeQuery = _.debounce(function(queryObj, change) {
     onChangeFilter(queryObj, change);
   }, 1000);

@@ -117,20 +117,16 @@ class Chart extends React.PureComponent {
 export function HomePage({ currentUser, expenseMetrics, setExpensesMetics }) {
   const [expenses, setExpenses] = useState(expenseMetrics);
   useEffect(() => {
-    if(!expenseMetrics){
-    userService
-      .getAllMetrics(currentUser, { all: true })
-      .then(expenses => {
-        debugger;
-        setExpensesMetics(expenses.data)
+    if (!expenseMetrics) {
+      userService.getAllMetrics(currentUser, { all: true }).then(expenses => {
+        setExpensesMetics(expenses.data);
       });
     }
   }, [currentUser, setExpensesMetics]);
-  
-  debugger;
+
   if (expenseMetrics) {
-    bar.data.columns[0] = expenseMetrics[0]
-    bar.data.columns[1] = expenseMetrics[1]
+    bar.data.columns[0] = expenseMetrics[0];
+    bar.data.columns[1] = expenseMetrics[1];
   }
 
   if (!expenseMetrics) {

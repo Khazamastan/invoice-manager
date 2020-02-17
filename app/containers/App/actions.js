@@ -15,7 +15,14 @@
  *    }
  */
 
-import { SET_USER, SET_EXPENSES, CHANGE_QUERY, CHANGE_PAGE, SET_METRICS } from './constants';
+import {
+  SET_USER,
+  SET_EXPENSES,
+  CHANGE_QUERY,
+  CHANGE_PAGE,
+  SET_METRICS,
+  SET_TOKEN,
+} from './constants';
 
 export function setUser(user) {
   return {
@@ -31,13 +38,19 @@ export function setExpenses(expenses) {
   };
 }
 
+export function setToken(token) {
+  return {
+    type: SET_TOKEN,
+    token,
+  };
+}
+
 export function setMetrics(metrics) {
   return {
     type: SET_METRICS,
     metrics,
   };
 }
-
 
 export function setExpensesError(expenses) {
   return {

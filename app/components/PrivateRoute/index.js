@@ -10,10 +10,10 @@ import {
   } from '../../containers/App/selectors';
 import { authenticationService } from '../../services';
 
-const PrivateRoute = ({ component: Component,user, roles, ...rest }) => (
+const PrivateRoute = ({ component: Component,user, token, roles, ...rest }) => (
     <Route {...rest} render={props => {
         const currentUser = user;
-        if (!currentUser) {
+        if (!currentUser || !token) {
             // not logged in so redirect to login page with the return url
             return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
         }
@@ -23,7 +23,7 @@ const PrivateRoute = ({ component: Component,user, roles, ...rest }) => (
             // role not authorised so redirect to home page
             return <Redirect to={{ pathname: '/'}} />
         }
-
+        
         // authorised so return component
         return <Component {...props} />
     }} />

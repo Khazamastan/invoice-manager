@@ -14,9 +14,11 @@ import {
   SET_EXPENSES_ERROR,
   CHANGE_QUERY,
   SET_METRICS,
+  SET_TOKEN,
 } from './constants';
 
 const currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
+const currentToken = JSON.parse(localStorage.getItem('token'));
 
 // The initial state of the App
 export const initialState = {
@@ -24,6 +26,7 @@ export const initialState = {
   error: false,
   currentUser: currentUserSubject,
   userData: {
+    token: currentToken,
     expenses: {
       data: false,
       total: 0,
@@ -55,6 +58,10 @@ const appReducer = (state = initialState, action) =>
 
       case SET_METRICS:
         draft.userData.metrics = action.metrics;
+        break;
+
+      case SET_TOKEN:
+        draft.userData.token = action.token;
         break;
 
       case SET_EXPENSES_ERROR:

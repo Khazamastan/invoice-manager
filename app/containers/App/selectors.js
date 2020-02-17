@@ -27,6 +27,12 @@ const makeSelectLoading = () =>
     globalState => globalState.loading,
   );
 
+const makeSelectCurrentUserToken = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.userData.token,
+  );
+
 const makeSelectError = () =>
   createSelector(
     selectGlobal,
@@ -55,6 +61,7 @@ export {
   selectGlobal,
   makeSelectCurrentUser,
   makeSelectExpensesMetics,
+  makeSelectCurrentUserToken,
   makeSelectLoading,
   makeSelectError,
   makeSelectExpenses,
