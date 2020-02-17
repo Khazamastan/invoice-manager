@@ -9,8 +9,11 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_REPOS = 'boilerplate/App/LOAD_REPOS';
-export const LOAD_REPOS_SUCCESS = 'boilerplate/App/LOAD_REPOS_SUCCESS';
-export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
+export const LOAD_INVOICE = 'boilerplate/App/LOAD_INVOICE';
+export const LOAD_INVOICE_SUCCESS = 'boilerplate/App/LOAD_INVOICE_SUCCESS';
+export const LOAD_INVOICE_ERROR = 'boilerplate/App/LOAD_INVOICE_ERROR';
 export const SET_USER = 'boilerplate/App/SET_USER';
 export const SET_EXPENSES = 'boilerplate/App/SET_EXPENSES';
+export const SET_EXPENSES_ERROR = 'boilerplate/App/SET_EXPENSES_ERROR';
+export const CHANGE_QUERY = 'boilerplate/App/CHANGE_QUERY';
+export const CHANGE_PAGE = 'boilerplate/App/CHANGE_PAGE';

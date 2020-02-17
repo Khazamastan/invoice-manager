@@ -9,11 +9,10 @@
 
 import produce from 'immer';
 import {
-  LOAD_REPOS_SUCCESS,
-  LOAD_REPOS,
-  LOAD_REPOS_ERROR,
   SET_USER,
   SET_EXPENSES,
+  SET_EXPENSES_ERROR,
+  CHANGE_QUERY,
 } from './constants';
 
 const currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
@@ -24,7 +23,14 @@ export const initialState = {
   error: false,
   currentUser: currentUserSubject,
   userData: {
-    expenses: false,
+    expenses: {
+      data: false,
+      count: 0,
+    },
+    query: {
+      search: '',
+      page: 1,
+    },
   },
 };
 
@@ -32,12 +38,6 @@ export const initialState = {
 const appReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case LOAD_REPOS:
-        draft.loading = true;
-        draft.error = false;
-        draft.userData.repositories = false;
-        break;
-
       case SET_USER:
         draft.currentUser = action.user;
         draft.loading = false;
@@ -47,10 +47,13 @@ const appReducer = (state = initialState, action) =>
         draft.userData.expenses = action.expenses;
         draft.loading = false;
         break;
+      case SET_EXPENSES_ERROR:
+        draft.error = true;
+        break;
 
-      case LOAD_REPOS_ERROR:
-        draft.error = action.error;
-        draft.loading = false;
+      case CHANGE_QUERY:
+        draft.loading = true;
+        draft.userData.query = action.query;
         break;
     }
   });

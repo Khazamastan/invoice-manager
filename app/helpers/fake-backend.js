@@ -22,14 +22,70 @@ export const users = [
 export function configureFakeBackend() {
   const expenses = (localStorage.getItem('expenses') &&
     JSON.parse(localStorage.getItem('expenses'))) || [
-    { id: 1, user: 1, description: 'New Year', vendor: 'xxx', amount: 100 },
-    { id: 2, user: 2, description: '', vendor: 'xxx', amount: 200 },
-    { id: 3, user: 1, description: '', vendor: 'xxx', amount: 300 },
-    { id: 4, user: 2, description: '', vendor: 'xxx', amount: 50 },
-    { id: 5, user: 1, description: '', vendor: 'xxx', amount: 600 },
-    { id: 6, user: 2, description: '', vendor: 'xxx', amount: 100 },
-    { id: 7, user: 2, description: '', vendor: 'xxx', amount: 900 },
-    { id: 8, user: 2, description: '', vendor: 'xxx', amount: 20 },
+    {
+      id: 1,
+      user: 1,
+      description: 'New Year',
+      vendor: 'SubWay',
+      amount: 100,
+      date: '2019-02-02',
+    },
+    {
+      id: 2,
+      user: 2,
+      description: 'First Expense',
+      vendor: 'SubWay',
+      amount: 200,
+      date: '2019-02-02',
+    },
+    {
+      id: 3,
+      user: 1,
+      description: 'Duductions',
+      vendor: 'KFC',
+      amount: 300,
+      date: '2019-02-02',
+    },
+    {
+      id: 4,
+      user: 2,
+      description: 'Sample Invoice',
+      vendor: 'MC',
+      amount: 50,
+      date: '2019-02-02',
+    },
+    {
+      id: 5,
+      user: 1,
+      description: 'New One',
+      vendor: 'MC',
+      amount: 600,
+      date: '2019-02-02',
+    },
+    {
+      id: 6,
+      user: 2,
+      description: 'Test 2',
+      vendor: 'KFC',
+      amount: 100,
+      date: '2019-02-02',
+    },
+    {
+      id: 7,
+      user: 2,
+      description: 'Regular invoice',
+      vendor: 'MC',
+      amount: 900,
+      date: '2019-02-02',
+    },
+    {
+      id: 8,
+      user: 2,
+      description: 'Shopping',
+      vendor: 'Dominos',
+      amount: 20,
+      date: '2019-02-02',
+    },
   ];
 
   if (!localStorage.getItem('expenses')) {
@@ -89,18 +145,41 @@ export function configureFakeBackend() {
           return ok(users);
         }
 
+        function getItemsBetweenIndex(list, start, end) {
+          return list.slice(start, end);
+        }
+
         if (url.endsWith('/expenses') && opts.method === 'GET') {
-          const expenses = JSON.parse(localStorage.getItem('expenses'));
+          debugger;
+          let expenses = JSON.parse(localStorage.getItem('expenses'));
           const { body } = opts;
+          const { user, query } = body;
+          let start = 0, end = 10;
+          if(query && query.page){
+            start = 10*(query.page-1);
+            end = 10*(query.page);
+          }
+          if (query && query.search) {
+            expenses = expenses.filter(o =>
+              _.some(o, v => _.toLower(v).indexOf(query.search) > -1),
+            );
+          }
           if (body.user.role === Role.Admin) {
-            return ok(expenses);
+            return ok({
+              data: getItemsBetweenIndex(expenses, start, end),
+              total: expenses.length,
+            });
           }
           const useExpenses = expenses.filter(
-            expense => expense.user == body.user.id,
+            expense => expense.user == user.id,
           );
-          return ok(useExpenses);
+
+          return ok({
+            data: getItemsBetweenIndex(useExpenses, start, end),
+            total: useExpenses.length,
+          });
         }
-        function getUserExpenses(body) {
+        function getUserExpenses(expenses, body) {
           const useExpenses = expenses.filter(
             expense => expense.user == body.user.id,
           );
@@ -113,12 +192,20 @@ export function configureFakeBackend() {
             const itemIndex = _.findIndex(expenses, { id: expense.id });
             expenses[itemIndex] = Object.assign({}, expense);
             localStorage.setItem('expenses', JSON.stringify(expenses));
-            return ok(getUserExpenses(expense));
+            const userExpenses = getUserExpenses(expenses, opts.body);
+            return ok({
+              data: getItemsBetweenIndex(userExpenses, 0, 10),
+              total: userExpenses.length,
+            });
           }
           expense.id = expenses.length;
           expenses.push(expense);
           localStorage.setItem('expenses', JSON.stringify(expenses));
-          return ok(getUserExpenses(expense));
+
+          return ok({
+            data: getItemsBetweenIndex(expenses, 0, 10),
+            count: expenses.length,
+          });
         }
 
         // pass through any requests not handled above

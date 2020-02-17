@@ -16,6 +16,7 @@ const TableBody = props => {
               <CellView
                 key={columnKey}
                 contact={contact}
+                header={header}
                 columnKey={columnKey}
                 cell={cellItem}
                 i={i}
@@ -26,6 +27,7 @@ const TableBody = props => {
         return (
           <Cell
             key={columnKey}
+            header={header}
             contact={contact}
             columnKey={columnKey}
             cell={cellItem}

@@ -1,17 +1,19 @@
-import React from "react";
-import CellWrapper from "./Wrapper"
+import React from 'react';
+import CellWrapper from './Wrapper';
 
 const Cell = props => {
-  const { columnKey, contact, cell, i } = props;
+  const { columnKey, contact, cell, i, header } = props;
   return (
     <CellWrapper className={columnKey}>
-      {(columnKey != "number") ?
-        <p>{(cell && cell != "NULL") ? contact[columnKey] : "-"}</p>
-        :
-        (i + 1)
-      }
+      {columnKey != 'number' ? (
+        <p className={header.className}>
+          {cell && cell != 'NULL' ? contact[columnKey] : '-'}
+        </p>
+      ) : (
+        i + 1
+      )}
     </CellWrapper>
   );
-}
+};
 
-export default Cell
+export default Cell;

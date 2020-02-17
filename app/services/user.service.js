@@ -6,11 +6,11 @@ export const userService = {
   editExpense,
 };
 
-function getAll(user) {
+function getAll(user, query) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader(),
-    body: { user },
+    body: { user, query },
   };
   return fetch(`/expenses`, requestOptions).then(handleResponse);
 }
@@ -24,10 +24,10 @@ function addExpense(id, expense) {
   return fetch(`/expenses`, requestOptions).then(handleResponse);
 }
 
-function editExpense(id, expense) {
+function editExpense(user, expense) {
   const requestOptions = {
     method: 'PUT',
-    body: { expense },
+    body: { expense, user },
     headers: authHeader(),
   };
   return fetch(`/expenses`, requestOptions).then(handleResponse);

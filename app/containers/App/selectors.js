@@ -15,6 +15,12 @@ const makeSelectCurrentUser = () =>
     globalState => globalState.currentUser,
   );
 
+  const makeSelectQuery = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.userData.query,
+  );
+
 const makeSelectLoading = () =>
   createSelector(
     selectGlobal,
@@ -46,4 +52,5 @@ export {
   makeSelectError,
   makeSelectExpenses,
   makeSelectLocation,
+  makeSelectQuery,
 };

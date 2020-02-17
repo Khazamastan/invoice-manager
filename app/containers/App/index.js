@@ -13,7 +13,8 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
 import ExpenseList from 'containers/ExpenseList/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import AddExpense from 'containers/AddExpense/Loadable';
@@ -24,12 +25,14 @@ import PrivateRoute from 'components/PrivateRoute';
 import { Role } from '../../helpers';
 import GlobalStyle from '../../global-styles';
 import { setExpenses, setUser } from './actions';
-import { userService, authenticationService } from '../../services';
+import { userService } from '../../services';
 import {
   makeSelectCurrentUser,
   makeSelectLoading,
   makeSelectError,
 } from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -38,7 +41,10 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
+const key = 'global';
 function App({ user, history, setExpenses }) {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
   const state = {
     currentUser: null,
     isAdmin: false,
@@ -48,27 +54,25 @@ function App({ user, history, setExpenses }) {
   useEffect(() => {
     const isAdmin = currentUser && currentUser.role === Role.Admin;
     setIsAdmin(isAdmin);
-    if(currentUser){
+    setCurrentUser(user);
+    if (currentUser) {
       userService.getAll(currentUser).then(expenses => setExpenses(expenses));
     }
-  }, [currentUser]);
+  }, [currentUser, user]);
   return (
     <AppWrapper>
-      <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
-      >
-        <meta name="description" content="A React.js Boilerplate application" />
+      <Helmet titleTemplate="%s - Invoice Manage" defaultTitle="Invoice Manage">
+        <meta name="description" content="A Invoice Manage application" />
       </Helmet>
-      <Header user={currentUser} isAdmin={isAdmin} />
+      {currentUser && <Header user={currentUser} isAdmin={isAdmin} />}
       <Switch>
         <PrivateRoute exact user={currentUser} path="/" component={HomePage} />
-        <PrivateRoute exact user={currentUser} path="/list" component={ExpenseList} />
-        {/* <PrivateRoute user={currentUser}
-          path="/admin"
-          roles={[Role.Admin]}
-          component={FeaturePage}
-       /> */}
+        <PrivateRoute
+          exact
+          user={currentUser}
+          path="/list"
+          component={ExpenseList}
+        />
         <Route path="/login" component={LoginPage} />
         <PrivateRoute
           user={currentUser}

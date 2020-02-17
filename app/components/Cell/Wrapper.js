@@ -5,7 +5,6 @@ const Wrapper = styled.td`
     width: 400px;
     p{
         margin : 0;
-        color: #000;
         white-space: no-wrap;
         overflow : hidden;
         text-overflow : ellipsis;
