@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export default styled(Link)`
   display: inline-flex;
-  margin: 1em;
+  margin: 0.3em 1em;
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -webkit-touch-callout: none;
@@ -12,6 +12,7 @@ export default styled(Link)`
   outline: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 500;
+  color: #fff;
   font-size: 16px;
   &.button{
     border: 0;

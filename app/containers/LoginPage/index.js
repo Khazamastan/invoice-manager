@@ -76,6 +76,7 @@ export function LoginPage({ setUser, user, history, token, setToken }) {
                     </label>
                     <Field
                       name="username"
+                      autoFocus
                       type="text"
                       className={`p-2 mt-3 mb-3  appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
                         errors.username && touched.username ? ' is-invalid' : ''
@@ -118,11 +119,11 @@ export function LoginPage({ setUser, user, history, token, setToken }) {
                   <div className="flex items-center pt-8">
                     <div className="w-1/2 flex items-center" />
                     <button
-                      className="ml-auto w-1/2 bg-gray-800 text-white p-2 rounded font-semibold hover:bg-gray-900"
+                      className="ml-auto w-1/2 bg-indigo-800 text-white p-2 rounded font-semibold hover:bg-indigo-900"
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Log In
+                      Submit
                     </button>
                   </div>
                 </Form>
@@ -153,6 +154,7 @@ export function LoginPage({ setUser, user, history, token, setToken }) {
                     <Field
                       name="otp"
                       type="password"
+                      autoFocus
                       className={`p-2 mt-3 mb-3 appearance-none block w-full bg-gray-200 placeholder-gray-900 rounded border focus:border-teal-500 form-control${
                         errors.password && touched.password ? ' is-invalid' : ''
                       }`}
@@ -167,7 +169,7 @@ export function LoginPage({ setUser, user, history, token, setToken }) {
                   <div className="flex items-center pt-8">
                     <div className="w-1/2 flex items-center" />
                     <button
-                      className="ml-auto w-1/2 bg-gray-800 text-white p-2 rounded font-semibold hover:bg-gray-900"
+                      className="ml-auto w-1/2 bg-indigo-800 text-white p-2 rounded font-semibold hover:bg-indigo-900"
                       type="submit"
                       disabled={isSubmitting}
                     >
@@ -180,26 +182,6 @@ export function LoginPage({ setUser, user, history, token, setToken }) {
           )}
         </div>
       </main>
-      <div className="bg-indigo-900 text-center py-4 lg:px-4 fixed bottom-0 w-full">
-        <div
-          className="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
-          role="alert"
-        >
-          <span className="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">
-            Welcome
-          </span>
-          <span className="font-semibold mr-2 text-left flex-auto">
-            Login to manage invoice
-          </span>
-          <svg
-            className="fill-current opacity-75 h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
-          </svg>
-        </div>
-      </div>
     </article>
   );
 }
