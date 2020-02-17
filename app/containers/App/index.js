@@ -67,7 +67,12 @@ function App({ user, history, setExpenses, token, setUser }) {
         <meta name="description" content="A Invoice Manage application" />
       </Helmet>
       {currentUser && token && (
-        <Header user={currentUser}  setToken={setToken} setUser={setUser} history={history} isAdmin={isAdmin} />
+        <Header
+          user={currentUser}
+          setUser={setUser}
+          history={history}
+          isAdmin={isAdmin}
+        />
       )}
       <Switch>
         <PrivateRoute
