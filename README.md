@@ -3,8 +3,11 @@ Assumptions:
 <h5>1. Assumed the Site Has to Users</h5>
 <b>Admin</b>
 ```usesrname```: admin
+
 ```password```: admin
+
 ```OTP```: 1234
+
 
 
 <b>User</b>
