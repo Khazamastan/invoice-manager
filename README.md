@@ -22,17 +22,14 @@ Assumptions:
 
 
 <h5>2. Access to Users</h5>
-1. Admin can view all the invoices created by all users including himself
-
-2. User can see his invoice comparision in a graph in dashboard, Admin can see all the invoices comparision grraph
-
-3. Admin can ```approve``` or ```reject``` an invoice
-
-4. User can only create and Edit his invoice
+1. Admin can view all the invoices created by all users including himself<br/>
+2. User can see his invoice comparision in a graph in dashboard, Admin can see all the invoices comparision grraph<br/>
+3. Admin can <b>approve</b> or <b>reject</b> an invoice<br/>
+4. User can only create and Edit his invoice<br/>
 
 
 
-Steps to run the code:
+<h4>Steps to run the code:</h4>
 
 ```npm run setup```
 
