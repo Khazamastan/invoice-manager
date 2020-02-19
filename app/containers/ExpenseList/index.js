@@ -99,7 +99,7 @@ export function HomePage({
   const headers = {
     id: {
       name: 'ID',
-      width: 8,
+      width: 10,
     },
     user: {
       name: 'Created By',
@@ -148,7 +148,7 @@ export function HomePage({
     },
     actions: {
       name: 'Actions',
-      width: 30,
+      width: 35,
       view: ({ invoice }) => {
         const canEdit =
           isAdmin &&

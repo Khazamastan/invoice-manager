@@ -39,7 +39,10 @@ import saga from './saga';
 const AppWrapper = styled.div`
   margin: 0 auto;
   display: flex;
-  min-height: 100%;
+  margin-top: 60px;
+  margin-bottom: 80px;
+  overflow: auto;
+  min-height: calc(100% - 160px);
   flex-direction: column;
 `;
 

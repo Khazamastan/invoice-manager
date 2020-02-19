@@ -16,7 +16,7 @@ function Header({ isAdmin, history, user, setUser }) {
     window.location.reload('/login');
   };
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-indigo-500 pt-1 pb-1 pr-0 pl-6">
+    <nav className="flex items-center justify-between flex-wrap bg-indigo-500 fixed top-0 w-full pt-1 pb-1 pr-0 pl-6">
       <div className="flex items-center flex-shrink-0 text-white">
         <span className="font-semibold text-xl tracking-tight">
           Invoice Management
